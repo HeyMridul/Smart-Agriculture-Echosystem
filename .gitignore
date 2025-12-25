@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+AgriMobo/node_modules/
+frontend/node_modules/
+server/node_modules/
+
+# Environment variables
+.env
+.env.local
+AgriMobo/.env
+frontend/.env
+server/.env
+
+# Build outputs
+dist/
+build/
+.next/
+server/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
