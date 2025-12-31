@@ -8,7 +8,7 @@
 ![Status](https://img.shields.io/badge/status-prototype-yellow)
 ![Round](https://img.shields.io/badge/Hack%20The%20Winter-Round%201-blue)
 
-**[Live Demo](#) • [Architecture](#system-architecture) • [Video Demo](#demo-video) • [Documentation](#documentation)**
+**[Live Demo](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP) • [Architecture](#system-architecture) • [Documentation](#documentation)**
 
 </div>
 
@@ -35,10 +35,9 @@
 - [Digital Twin & 3D Visualization](#-digital-twin--3d-visualization)
 - [Blockchain Integration](#-blockchain-integration)
 - [Setup & Installation](#-setup--installation)
-- [Demo Video](#-demo-video)
+- [Deployed Prototype](#-deployed-prototype)
 - [Roadmap for Round 2](#-roadmap-for-round-2)
 - [Team](#-team)
-- [License](#-license)
 
 ---
 
@@ -706,9 +705,7 @@ farm/actuators/valve2/status
 ```python
 def should_irrigate(soil_moisture, weather_forecast, crop_type):
     ideal_moisture = CROP_MOISTURE_MAP[crop_type]
-    rain_probability = weather_forecast
-
-['rain_chance']
+    rain_probability = weather_forecast['rain_chance']
     
     if soil_moisture < ideal_moisture * 0.7:
         if rain_probability < 30:
@@ -943,27 +940,17 @@ VITE_CONTRACT_ADDRESS=0x...
 
 ---
 
-## 🎥 Deployed prototype link
+## 🌐 Deployed Prototype
 
-**Watch Our System in Action**:
+**Live Demo**: [https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP)
 
-📹 **[Full Demo]([https://youtu.be/YOUR_VIDEO_ID](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP))**
-
-**Timestamps**:
-- 0:00 - Introduction & Problem Statement
-- 2:30 - Dashboard Overview
-- 5:00 - Real-Time Sensor Monitoring
-- 8:15 - AI Disease Detection Demo
-- 11:00 - 3D Digital Twin Walkthrough
-- 14:30 - Voice Chatbot (Hindi + English)
-- 17:00 - IoT Hardware Demonstration
-- 20:00 - Blockchain Transaction Flow
-- 23:00 - Auto Irrigation in Action
-- 25:00 - Future Roadmap
-
-**Alternative Links**:
-- [Raw Demo Footage (Google Drive)](https://drive.google.com/file/d/YOUR_FILE_ID)
-- [Circuit Assembly Timelapse](https://youtu.be/YOUR_CIRCUIT_VIDEO)
+**Experience the full system including**:
+- Real-time sensor dashboard
+- AI disease detection interface
+- 3D Digital Twin visualization
+- RAG-powered voice chatbot
+- Blockchain transaction tracking
+- Auto irrigation controls
 
 ---
 
@@ -1024,19 +1011,12 @@ VITE_CONTRACT_ADDRESS=0x...
 
 ## 👥 Team
 
-| Name | Role | GitHub | LinkedIn |
-|------|------|--------|----------|
-| [Mridul Bhardwaj] | Full-Stack Dev, IoT | [@HeyMridul](https://github.com/HeyMridul) | [Profile](www.linkedin.com/in/mridul-bhardwaj-09975a277) |
-| [Suyash Pathak] | AI/ML Engineer | [@username](https://github.com/username) | [Profile](https://linkedin.com) |
-| [Suchir Kaushik] | Blockchain Dev | [@username](https://github.com/username) | [Profile](https://linkedin.com) |
-| [Priyank Tyagi] | UI/UX Designer | [@username](https://github.com/username) | [Profile](https://linkedin.com) |
-
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for details.
+| Name | Role |
+|------|------|
+| **Suyash Pathak** | Backend, AI |
+| **Mridul Bhardwaj** | Frontend, ML |
+| **Suchir Kaushik** | IoT |
+| **Priyank Tyagi** | Web Socket, Cloud Service |
 
 ---
 
@@ -1055,7 +1035,7 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for 
 
 For questions, collaborations, or demo requests:
 
-- **Email**: mridu.2005.05@gmail.com , cu23220170@coeruiversity.ac.in
+- **Email**: mridu.2005.05@gmail.com, cu23220170@coeruiversity.ac.in
 
 ---
 
@@ -1088,6 +1068,6 @@ For questions, collaborations, or demo requests:
 
 ---
 
-**Last Updated**: December 25, 2025  
+**Last Updated**: December 31, 2025  
 **Version**: 1.0.0 (Prototype)  
-**Status**: ✅ Functional Prototype Ready for Evaluation    
+**Status**: ✅ Functional Prototype Ready for Evaluation
