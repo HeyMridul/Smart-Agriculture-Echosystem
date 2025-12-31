@@ -574,10 +574,10 @@ Our models outperform industry standards:
 
 | Name | Role | Expertise | Contact |
 |------|------|-----------|---------|
-| **Suyash Pathak** | Backend & AI Lead | Node.js, ML Pipelines, Cloud Architecture | [LinkedIn](#) |
+| **Suyash Pathak** | Backend & AI Lead | Node.js, ML Pipelines, Cloud Architecture | suyashp271@gmail.com |
 | **Mridul Bhardwaj** | Frontend & ML | React, Computer Vision, UI/UX | mridu.2005.05@gmail.com |
-| **Suchir Kaushik** | IoT Engineer | Embedded Systems, Circuit Design | [GitHub](#) |
-| **Priyank Tyagi** | DevOps & Cloud | WebSockets, AWS, Real-time Systems | cu23220170@coeruiversity.ac.in |
+| **Suchir Kaushik** | IoT Engineer | Embedded Systems, Circuit Design | manworun1@gmail.com |
+| **Priyank Tyagi** | DevOps & Cloud | WebSockets, AWS, Real-time Systems | priyanktyagi404@gmail.com |
 
 **Combined Experience**: 12+ years in software development, 3 hackathon wins, 2 published research papers on precision agriculture
 
@@ -726,7 +726,7 @@ Our platform directly contributes to:
 - Partnership Proposals: [Contact Form](#)
 
 **For Developers**:
-- GitHub: [Project Repository](https://github.com/your-org/smart-agriculture-ecosystem)
+- GitHub: [Project Repository](https://github.com/HeyMridul/Smart-Agriculture-Echosystem)
 - API Documentation: [docs.smartagri.com](#)
 - Contributor Guide: [CONTRIBUTING.md](#)
 
@@ -774,7 +774,7 @@ If you use this work in research or commercial projects, please cite:
 
 *Transforming agriculture through intelligent technology*
 
-**[⭐ Star this repository](https://github.com/your-org/smart-agriculture-ecosystem) • [🐛 Report Bug](#) • [✨ Request Feature](#)**
+**[⭐ Star this repository](https://github.com/HeyMridul/Smart-Agriculture-Echosystem) • [🐛 Report Bug](#) • [✨ Request Feature](#)**
 
 </div>
 
@@ -783,4 +783,4 @@ If you use this work in research or commercial projects, please cite:
 **Document Version**: 2.0.0  
 **Last Updated**: December 31, 2025  
 **Status**: ✅ Production-Ready Prototype  
-**Next Review**: February 2025 (Round 2 Submission)
+
