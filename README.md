@@ -9,7 +9,7 @@
 ![Round](https://img.shields.io/badge/Hack%20The%20Winter-Round%201-blue)
 ![Innovation](https://img.shields.io/badge/innovation-high-orange)
 
-**[Live Prototype](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP) • [Video Demo](#) • [Technical Deep Dive](#system-architecture)**
+**[Live Prototype](https://plant-8wbnfqa9c-suyash-pathak04s-projects.vercel.app) • [Video Demo](#) • [Technical Deep Dive](#system-architecture)**
 
 </div>
 
@@ -481,7 +481,7 @@ This starts all services with optimized production configurations.
 ## 🎥 Demonstration
 
 ### Live Prototype
-**URL**: [https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP)
+**URL**: [https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app](https://plant-8wbnfqa9c-suyash-pathak04s-projects.vercel.app)
 
 **Available Features**:
 - Real-time sensor dashboard with live data
