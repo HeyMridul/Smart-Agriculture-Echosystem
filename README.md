@@ -733,6 +733,21 @@ Humidity: 65%           Zone3: 52%
 
 **Why This Model**: ResNet-50 balances accuracy with inference speed (200ms per image on CPU, 50ms on GPU). Lighter models (MobileNet) were 8% less accurate; heavier models (ResNet-101) showed only 1.5% improvement but 3x slower.
 
+**Deployment**: The CNN model is served via a lightweight Python Flask API. The Node.js backend makes HTTP POST requests to the Flask service when a farmer uploads an image.
+
+**Integration Flow**:
+```javascript
+// Node.js backend calls Flask ML service
+const detectDisease = async (imageBase64, cropType) => {
+  const response = await axios.post('http://localhost:8000/predict', {
+    image: imageBase64,
+    crop_type: cropType
+  });
+  
+  return response.data;  // Returns disease classification
+};
+```
+
 ---
 
 #### Yield Prediction System
@@ -779,6 +794,21 @@ Humidity: 65%           Zone3: 52%
 ```
 
 **Integration with Sensors**: Model retrains weekly using actual yield data from harvested farms. Real-time soil sensor data overrides static soil values, improving predictions by 12%.
+
+**Deployment**: The Random Forest model is saved as a pickle file and served via Flask API. Node.js backend sends soil/weather data and receives yield predictions.
+
+```javascript
+// Node.js backend integration
+const predictYield = async (farmData) => {
+  const response = await axios.post('http://localhost:8000/yield-predict', {
+    soil_npk: farmData.soil,
+    weather: farmData.weather,
+    crop_type: farmData.crop
+  });
+  
+  return response.data.predicted_yield;
+};
+```
 
 ---
 
@@ -1017,6 +1047,8 @@ Bot: [uses context] "If it rains, wait 24 hours before applying the fungicide I 
 
 #### ESP32 Firmware Logic
 
+**Note**: While our system supports ESP32, the primary deployment uses **NodeMCU** and **Raspberry Pi** for production farms. ESP32 is used as a cost-effective alternative for smaller deployments.
+
 **Core Loop** (simplified):
 ```cpp
 void loop() {
@@ -1135,18 +1167,17 @@ bool shouldIrrigate(int soilMoisture, int rainProb, float temp) {
 - **Image data**: Stored on IPFS, hash recorded on-chain for verification
 - **User profiles**: PostgreSQL (privacy concerns)
 
-**Cost Optimization**:
+**On-Chain Storage Cost (Ethereum Sepolia Testnet)**:
 ```
-On-Chain Storage Cost (Polygon):
+Testing Phase (Testnet):
   • 1 sensor record = ~500 bytes
-  • Gas cost per record = ~0.0002 MATIC (~$0.0001 at $0.50/MATIC)
-  • Hourly aggregates (24/day) = $0.0024/day
-  • Monthly cost per farm = $0.072
+  • Gas cost per record = ~0 ETH (testnet is free)
+  • Unlimited testing during development
 
-Comparison:
-  • Ethereum mainnet: $15-50 per record (prohibitively expensive)
-  • Centralized DB only: $0 but no immutability/trust
-  • Our hybrid: 99.9% savings vs Ethereum, retains trust benefits
+Production Migration (Ethereum Mainnet - Future):
+  • Will migrate to Layer-2 (Polygon/Optimism) for cost efficiency
+  • Estimated: $0.001 per record vs $15-50 on Ethereum mainnet
+  • 99.9% savings with L2 solutions
 ```
 
 **Why Blockchain Is Justified**:
@@ -1413,19 +1444,21 @@ function logDailySummary(
 ### Cost Optimization
 
 **Current Prototype Costs**:
-- **Cloud Hosting** (Vercel): $0 (free tier)
+- **Cloud Hosting** (Vercel + Render): $0 (free tier)
 - **Database** (MongoDB Atlas): $0 (free tier, 512MB)
 - **AI API** (OpenAI): ~$5/month (development usage)
-- **Blockchain** (Polygon testnet): $0 (testnet MATIC is free)
+- **Blockchain** (Ethereum Sepolia testnet): $0 (testnet ETH is free)
+- **AWS IoT Core**: $0 (free tier, <250K messages/month)
 - **Total**: ~$5/month
 
 **Projected Costs at Scale (10,000 farms)**:
-- **Cloud Hosting** (AWS/GCP): $500-800/month (EC2 instances, load balancers)
-- **Database**: $300/month (PostgreSQL RDS, MongoDB Atlas clusters)
+- **Cloud Hosting** (AWS/Render): $500-800/month (EC2 instances, load balancers)
+- **Database**: $300/month (MongoDB Atlas clusters)
 - **AI Inference**: $1200/month (GPU instances for disease detection, chatbot)
-- **Blockchain** (Polygon mainnet): $150/month (gas fees with batching)
+- **Blockchain** (Ethereum mainnet): $150/month (gas fees with batching)
+- **AWS IoT Core**: $200/month (device management + data transfer)
 - **Data Transfer**: $200/month (sensor data uploads)
-- **Total**: ~$2,350/month = $0.23 per farm per month
+- **Total**: ~$2,550/month = $0.26 per farm per month
 
 **Revenue Model**:
 - **Freemium**: Basic features free (sensors + dashboard)
@@ -1646,10 +1679,11 @@ Our team followed a collaborative development model with clear ownership but sig
 - EVM-compatible (can reuse Ethereum tools/tutorials)
 - More decentralized than Solana (avoid single point of failure)
 
-**Why ESP32 (not Arduino/Raspberry Pi)**:
-- Built-in WiFi (Arduino needs separate module)
-- Cheaper than Raspberry Pi (₹300 vs ₹3500)
-- Low power consumption (battery/solar-powered option)
+**Why NodeMCU / Raspberry Pi (not just Arduino/ESP32)**:
+- **NodeMCU**: Built-in WiFi, cheaper than Raspberry Pi (₹300 vs ₹3500), perfect for basic sensor networks
+- **Raspberry Pi**: More powerful, can run edge AI models locally (offline disease detection), supports USB cameras
+- **ESP32**: Good balance of features and cost, used as backup option
+- **Arduino**: Requires separate WiFi module (ESP8266), less cost-effective than NodeMCU
 
 ---
 
@@ -1845,14 +1879,11 @@ IPFS_GATEWAY=https://ipfs.infura.io:5001
 
 **Initialize Database**:
 ```bash
-# Run migrations
-npm run migrate
-
-# Seed initial data (optional)
-npm run seed
+# MongoDB doesn't require migrations, but you can seed initial data
+npm run seed  # Optional: Add sample farms and users
 
 # Start backend server
-npm run dev  # Development mode with hot reload
+npm run dev  # Development mode with hot reload (http://localhost:5000)
 # or
 npm start    # Production mode
 ```
@@ -1868,14 +1899,14 @@ pip install -r requirements.txt
 # Download pre-trained models
 python scripts/download_models.py
 
-# Start AI service
-uvicorn app:app --reload --port 8000
+# Start Flask AI service
+python app.py  # Runs on http://localhost:8000
 ```
 
 **requirements.txt** (key dependencies):
 ```
-fastapi==0.104.1
-uvicorn==0.24.0
+flask==3.0.0
+flask-cors==4.0.0
 tensorflow==2.14.0
 torch==2.1.0
 torchvision==0.16.0
@@ -1885,9 +1916,39 @@ langchain==0.0.335
 pinecone-client==2.2.4
 openai==1.3.5
 google-cloud-translate==3.12.1
+gunicorn==21.2.0
 ```
 
-#### 4. Frontend Setup
+**Flask app.py structure**:
+```python
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import tensorflow as tf
+
+app = Flask(__name__)
+CORS(app)
+
+# Load models on startup
+disease_model = tf.keras.models.load_model('models/disease_cnn.h5')
+yield_model = joblib.load('models/yield_rf.pkl')
+
+@app.route('/predict', methods=['POST'])
+def predict_disease():
+    data = request.json
+    # Process image, run inference
+    return jsonify(result)
+
+@app.route('/yield-predict', methods=['POST'])
+def predict_yield():
+    data = request.json
+    # Process features, predict yield
+    return jsonify(prediction)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000, debug=True)
+```
+
+#### Frontend Setup
 ```bash
 cd frontend
 npm install
@@ -1898,13 +1959,13 @@ cp .env.example .env.local
 
 **.env.local**:
 ```env
-VITE_API_URL=http://localhost:3000
-VITE_WEBSOCKET_URL=ws://localhost:3000
+VITE_API_URL=http://localhost:5000
+VITE_WEBSOCKET_URL=ws://localhost:5000
 VITE_AI_SERVICE_URL=http://localhost:8000
 
 # Blockchain
-VITE_POLYGON_RPC=https://polygon-mumbai.g.alchemy.com/v2/YOUR_KEY
-VITE_CHAIN_ID=80001
+VITE_ETHEREUM_RPC=https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY
+VITE_CHAIN_ID=11155111
 VITE_FARM_REGISTRY_CONTRACT=0x...
 VITE_SENSOR_LOGGER_CONTRACT=0x...
 VITE_MARKETPLACE_CONTRACT=0x...
@@ -1917,7 +1978,7 @@ VITE_ENABLE_BLOCKCHAIN=true
 
 **Start Development Server**:
 ```bash
-npm run dev  # Starts on http://localhost:5173
+npm run dev  # Starts on http://localhost:3000
 ```
 
 #### 5. Blockchain Setup (Optional - for full features)
@@ -1928,8 +1989,8 @@ npm install
 # Compile smart contracts
 npx hardhat compile
 
-# Deploy to testnet (Polygon Mumbai)
-npx hardhat run scripts/deploy.js --network mumbai
+# Deploy to testnet (Ethereum Sepolia)
+npx hardhat run scripts/deploy.js --network sepolia
 
 # Copy deployed contract addresses to frontend/.env.local and backend/.env
 ```
@@ -1963,13 +2024,25 @@ sudo systemctl restart mosquitto
 
 ### Hardware Setup (IoT)
 
-#### 1. Install Arduino IDE & ESP32 Support
+#### 1. Install Arduino IDE & Microcontroller Support
+
+**For NodeMCU / ESP32**:
 ```
 1. Download Arduino IDE from https://www.arduino.cc/en/software
 2. Open Arduino IDE → File → Preferences
 3. Add to "Additional Board Manager URLs":
-   https://dl.espressif.com/dl/package_esp32_index.json
-4. Tools → Board → Boards Manager → Search "ESP32" → Install
+   For ESP32: https://dl.espressif.com/dl/package_esp32_index.json
+   For NodeMCU: http://arduino.esp8266.com/stable/package_esp8266com_index.json
+4. Tools → Board → Boards Manager → Search "ESP32" or "ESP8266" → Install
+```
+
+**For Raspberry Pi**:
+```
+1. Install Raspberry Pi OS (Raspbian)
+2. Install Python libraries:
+   sudo apt-get update
+   sudo apt-get install python3-pip
+   pip3 install paho-mqtt Adafruit_DHT RPi.GPIO
 ```
 
 #### 2. Install Required Libraries
@@ -1981,6 +2054,8 @@ Tools → Manage Libraries → Install:
 ```
 
 #### 3. Configure & Upload Firmware
+
+**For NodeMCU / ESP32** (Arduino):
 ```bash
 cd hardware/firmware
 
@@ -1995,9 +2070,20 @@ const int mqtt_port = 1883;
 const char* mqtt_user = "admin";
 const char* mqtt_pass = "your_mqtt_password";
 
-# Select board: Tools → Board → ESP32 Dev Module
-# Select port: Tools → Port → (Your ESP32 port, e.g., COM3 or /dev/ttyUSB0)
+# Select board: Tools → Board → NodeMCU 1.0 (or ESP32 Dev Module)
+# Select port: Tools → Port → (Your device port, e.g., COM3 or /dev/ttyUSB0)
 # Upload: Sketch → Upload (or Ctrl+U)
+```
+
+**For Raspberry Pi** (Python):
+```bash
+cd hardware/rpi_sensor
+
+# Edit config.py with your credentials
+nano config.py
+
+# Run the sensor script
+python3 sensor_reader.py
 ```
 
 #### 4. Wiring (see Circuit Diagram in /hardware/schematics/)
@@ -2051,36 +2137,43 @@ mosquitto -c /etc/mosquitto/mosquitto.conf
 # Terminal 5: Backend
 cd backend && npm run dev
 
-# Terminal 6: AI Service
-cd ml-service && source venv/bin/activate && uvicorn app:app --reload
+# Terminal 6: AI Service (Flask)
+cd ml-service && source venv/bin/activate && python app.py
 
 # Terminal 7: Frontend
 cd frontend && npm run dev
 ```
 
 **Access the Application**:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:3000/api
-- AI Service: http://localhost:8000/docs (Swagger UI)
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000/api
+- AI Service (Flask): http://localhost:8000
 
 ---
 
 ## Deployed Prototype
 
-**Live Demo**: [https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP)
+**Live Demo**: [Live Demo](https://plant-qjvnov9lf-suyash-pathak04s-projects.vercel.app?_vercel_share=CCawH0RePHgy3e9RMYeUCHEM4XiGSdoP)
+
+**Deployment Architecture**:
+- **Frontend**: Deployed on Vercel (React.js app)
+- **Backend**: Deployed on Render (Node.js + Express API)
+- **AI Service**: Deployed on Render (Flask ML API)
+- **IoT**: AWS IoT Core for device management
+- **Database**: MongoDB Atlas (cloud-hosted)
 
 **What You Can Experience**:
 1. **Dashboard**: Real-time sensor data visualization (simulated data for demo)
 2. **Disease Detection**: Upload crop images to test AI model
-3. **3D Digital Twin**: Interactive farm visualization
+3. **3D Digital Twin**: Interactive farm visualization with Three.js
 4. **RAG Chatbot**: Ask agricultural questions (try: "How to treat tomato blight?")
-5. **Blockchain Explorer**: View on-chain sensor records (Polygon Mumbai testnet)
+5. **Blockchain Explorer**: View on-chain sensor records (Ethereum testnet)
 6. **Irrigation Controls**: Test auto/manual modes (safe mode - no actual pumps)
 
 **Demo Credentials**:
 - Email: demo@farmer.com
 - Password: demo123
-- MetaMask: Connect any wallet (Mumbai testnet)
+- MetaMask: Connect any wallet (Ethereum testnet)
 
 **Note**: The deployed version runs on simulated sensor data. For real hardware integration, follow the local setup instructions above.
 
@@ -2090,7 +2183,7 @@ cd frontend && npm run dev
 
 ### API Documentation
 
-**Base URL**: `http://localhost:3000/api`
+**Base URL**: `http://localhost:5000/api`
 
 **Authentication**: JWT token in `Authorization: Bearer <token>` header
 
@@ -2358,11 +2451,8 @@ This project stands on the shoulders of giants. We are deeply grateful to:
 **For Partnership Inquiries**: [Contact Form](https://your-website.com/contact)
 
 **Community**:
-- GitHub Issues: [Report bugs](https://github.com/your-org/smart-agriculture-ecosystem/issues)
-- Discussions: [Join conversations](https://github.com/your-org/smart-agriculture-ecosystem/discussions)
-- Discord: [Developer community](https://discord.gg/your-invite)
-
-**Office Hours**: We host weekly office hours (Saturdays 4-6 PM IST) on Google Meet for anyone implementing this system. [Calendar link](https://calendar.google.com/your-link)
+- GitHub Issues: [Report bugs](https://github.com/HeyMridul/Smart-Agriculture-Echosystem/issues)
+- Discussions: [Join conversations](https://github.com/HeyMridul/Smart-Agriculture-Echosystem/discussions)
 
 ---
 
@@ -2410,7 +2500,7 @@ Hack The Winter 2025
 **Lines of Code**: ~45,000 (Backend: 12K, Frontend: 18K, ML: 8K, IoT: 7K)  
 **Commits**: 487  
 **Team Hours**: 600+ combined  
-**Farms Tested**: 5 pilot farms in Punjab
+**Farms Tested**: 3 pilot farms in Punjab, UttarPradesh
 
 **README Word Count**: ~18,500 words  
 **Estimated Judge Reading Time**: 45-60 minutes (but worth every minute we hope!)
