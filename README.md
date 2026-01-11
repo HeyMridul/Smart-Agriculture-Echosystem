@@ -2412,5 +2412,6 @@ Hack The Winter 2025
 **Team Hours**: 600+ combined  
 **Farms Tested**: 5 pilot farms in Punjab
 
+
 **README Word Count**: ~18,500 words  
 **Estimated Judge Reading Time**: 45-60 minutes (but worth every minute we hope!)
