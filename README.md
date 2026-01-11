@@ -1,6 +1,15 @@
 # Smart Agriculture Ecosystem
 ### AI-Powered, IoT-Driven, Blockchain-Secured Farming Platform
 
+<div align="center">
+
+**[Live Prototype](https://plant-8wbnfqa9c-suyash-pathak04s-projects.vercel.app) • [IOT Video Demo](https://drive.google.com/file/d/1I5bzNseXy1PmK32txv23WiuEzRhw6Hup/view?usp=drive_link)**
+
+</div>
+
+---
+
+
 ---
 
 ## Executive Summary
