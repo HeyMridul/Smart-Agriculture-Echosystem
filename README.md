@@ -1748,9 +1748,9 @@ function logDailySummary(
 
 ---
 
-## What We Improved After Round 1
+## What We Improved
 
-| Area | Round 1 State | Round 2 Improvements | Impact |
+| Area | initial State |  Improvements | Impact |
 |------|---------------|---------------------|---------|
 | **Architecture** | Monolithic Node.js app, single database | Microservices, sharded databases, horizontal scaling plan | Can now support 10,000+ farms (vs 10 farms limit) |
 | **AI Models** | Single disease detection CNN | Added yield prediction (Random Forest), rainfall forecasting (LSTM), fertilizer recommendation (XGBoost) | 4x more decision-support capabilities |
@@ -1846,22 +1846,6 @@ function logDailySummary(
 - Open-source core IoT firmware (allow community contributions)
 
 ---
-
-## Team Contributions
-
-Our team followed a collaborative development model with clear ownership but significant overlap and code review.
-
-| Team Member | Primary Responsibilities | Key Implementations | Research & Design |
-|-------------|------------------------|---------------------|-------------------|
-| **Suyash Pathak** | Backend Architecture, AI/ML Integration | • Node.js API server with Express<br>• PostgreSQL schema design<br>• MQTT broker setup<br>• AI model deployment (FastAPI service)<br>• Rainfall prediction LSTM model<br>• Chatbot RAG pipeline integration | • Researched agricultural datasets<br>• Designed system architecture<br>• Studied time-series forecasting for weather |
-| **Mridul Bhardwaj** | Frontend Development, ML Models | • React dashboard with real-time updates<br>• 3D Digital Twin (Three.js)<br>• Disease detection CNN (ResNet-50)<br>• Yield prediction model (Random Forest)<br>• Data visualization (Chart.js) | • Researched computer vision for crops<br>• Studied PlantVillage dataset<br>• Designed UI/UX for low-literacy users |
-| **Suchir Kaushik** | IoT Hardware, Sensor Integration | • ESP32 firmware (Arduino C++)<br>• Circuit design and wiring<br>• Sensor calibration (pH, NPK)<br>• MQTT client implementation<br>• Irrigation relay control logic | • Researched soil sensor accuracy<br>• Designed power management<br>• Tested sensor placement strategies |
-| **Priyank Tyagi** | WebSocket/Real-Time Systems, Cloud Deployment | • Socket.io real-time dashboard updates<br>• Redis caching layer<br>• Vercel deployment configuration<br>• CI/CD pipeline (GitHub Actions)<br>• MongoDB time-series optimization | • Researched scalability patterns<br>• Designed caching strategy<br>• Studied WebSocket performance |
-
-**Collaboration Highlights**:
-- **Suyash + Mridul**: Integrated ML models with backend API, created standardized JSON schema for predictions
-- **Suchir + Priyank**: Worked on MQTT → WebSocket → Frontend data flow, debugged connection issues
-- **All members**: Daily standups, peer code reviews, shared documentation in Notion
 
 **Tools & Processes**:
 - **Version Control**: Git with feature branches, pull request reviews (min 1 approval)
@@ -2754,7 +2738,6 @@ This README demonstrates that we've thought through the engineering deeply. But 
 ### 🌾 Building the Future of Farming, One Farm at a Time 🌾
 
 **Team ArrIgOTech**  
-Hack The Winter 2025
 
 *"The best time to plant a tree was 20 years ago. The second best time is now."*  
 *—The best time to modernize farming was 20 years ago. The second best time is today.*
